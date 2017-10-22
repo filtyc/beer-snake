@@ -44,7 +44,38 @@ void BeerSnake::move() {
 
    switch(direction) {
       case BeerSnake::UP: {
-         snakeYs.at(0) -= ITEM_SIDE;
+         if (snakeYs.at(0) == 0){
+            snakeYs.at(0) = (ITEMS_VERTICALLY - 1) * ITEM_SIDE;
+         }
+         else {
+            snakeYs.at(0) -= ITEM_SIDE;
+         }
+         break;
+      }
+      case BeerSnake::RIGHT: {
+         if (snakeXs.at(0) == (ITEMS_HORIZONTALLY - 1) * ITEM_SIDE) {
+            snakeXs.at(0) = 0;
+         }
+         else {
+            snakeXs.at(0) += ITEM_SIDE;
+         }
+         break;
+      }
+      case BeerSnake::DOWN: {
+         if (snakeYs.at(0) == (ITEMS_VERTICALLY - 1) * ITEM_SIDE) {
+            snakeYs.at(0) = 0;
+         }
+         else {
+            snakeYs.at(0) += ITEM_SIDE;
+         }
+      }
+      case BeerSnake::LEFT: {
+         if (snakeXs.at(0) == 0) {
+            snakeXs.at(0) = (ITEMS_HORIZONTALLY - 1) * ITEM_SIDE;
+         }
+         else {
+            snakeXs.at(0) -= ITEM_SIDE;
+         }
       }
    }
 }
