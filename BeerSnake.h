@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QKeyEvent>
 #include <QImage>
 #include <array>
 
@@ -12,6 +13,7 @@ public:
 protected:
    void paintEvent(QPaintEvent *);
    void timerEvent(QTimerEvent *);
+   void keyPressEvent(QKeyEvent *);
 private:
    static const int ITEM_SIDE = 30;
    static const int ITEMS_HORIZONTALLY = 20;
@@ -26,6 +28,7 @@ private:
    std::array<int, MAX_LENGTH> snakeXs;
    std::array<int, MAX_LENGTH> snakeYs;
    int direction;
+   int newDirection;
 
    QImage head;
    QImage body;
@@ -33,6 +36,7 @@ private:
 
    void loadImages();
    void startGame();
+   void changeDirection();
    void move();
 
 };

@@ -17,6 +17,7 @@ void BeerSnake::loadImages() {
 void BeerSnake::startGame() {
    length = 2;
    direction = BeerSnake::UP;
+   newDirection = BeerSnake::UP;
    snakeXs.at(0) = (ITEMS_HORIZONTALLY/2-1)*ITEM_SIDE;
    snakeYs.at(0) = (ITEMS_VERTICALLY/2-1)*ITEM_SIDE;
    snakeXs.at(1) = snakeXs.at(0);
@@ -33,6 +34,37 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
 
    for (int piece = 1; piece < length; piece++) {
       painter.drawImage(snakeXs.at(piece), snakeYs.at(piece), body);
+   }
+}
+
+void BeerSnake::timerEvent(QTimerEvent *e) {
+   Q_UNUSED(e);
+   changeDirection();
+   move();
+   repaint();
+}
+
+void BeerSnake::keyPressEvent(QKeyEvent *e) {
+   int key = e->key();
+   switch(key) {
+      case Qt::Key_Up: {
+         newDirection = BeerSnake::UP;
+         break;
+      }
+      case Qt::Key_Right: {
+         newDirection = BeerSnake::RIGHT;
+         break;
+      }
+      case Qt::Key_Down: {
+         newDirection = BeerSnake::DOWN;
+         break;
+      }
+      case Qt::Key_Left: {
+         newDirection = BeerSnake::LEFT;
+      }
+      default: {
+         break;
+      }
    }
 }
 
@@ -68,6 +100,7 @@ void BeerSnake::move() {
          else {
             snakeYs.at(0) += ITEM_SIDE;
          }
+         break;
       }
       case BeerSnake::LEFT: {
          if (snakeXs.at(0) == 0) {
@@ -80,8 +113,33 @@ void BeerSnake::move() {
    }
 }
 
-void BeerSnake::timerEvent(QTimerEvent *e) {
-   Q_UNUSED(e);
-   move();
-   repaint();
+void BeerSnake::changeDirection() {
+   if (direction != newDirection) {
+      switch(newDirection) {
+         case BeerSnake::UP: {
+            if (direction != BeerSnake::DOWN) {
+               direction = newDirection;
+            }
+            break;
+         }
+         case BeerSnake::RIGHT: {
+            if (direction != BeerSnake::LEFT) {
+               direction = newDirection;
+            }
+            break;
+         }
+         case BeerSnake::DOWN: {
+            if (direction != BeerSnake::UP) {
+               direction = newDirection;
+            }
+            break;
+         }
+         case BeerSnake::LEFT: {
+            if (direction != BeerSnake::RIGHT) {
+               direction = newDirection;
+            }
+            break;
+         }
+      }
+   }
 }
