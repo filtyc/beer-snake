@@ -21,7 +21,7 @@ private:
    static const int BOARD_WIDTH = ITEM_SIDE * ITEMS_HORIZONTALLY;
    static const int BOARD_HIGHT = ITEM_SIDE * ITEMS_VERTICALLY;
    static const int MAX_LENGTH = ITEMS_HORIZONTALLY * ITEMS_VERTICALLY;
-   enum Direction {UP, RIGHT, DOWN, LEFT};
+   enum Direction {Up, Right, Down, Left};
    static const int STEP_TIME = 200;
 
    int length;
@@ -29,6 +29,8 @@ private:
    std::array<int, MAX_LENGTH> snakeYs;
    int direction;
    int newDirection;
+   int beerX;
+   int beerY;
 
    QImage head;
    QImage body;
@@ -38,5 +40,6 @@ private:
    void startGame();
    void changeDirection();
    void move();
+   void placeBeer();
 
 };
