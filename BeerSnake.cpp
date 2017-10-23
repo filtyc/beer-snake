@@ -1,10 +1,12 @@
 #include <BeerSnake.h>
 #include <QPainter>
 #include <QTime>
+#include <QApplication>
 
 BeerSnake::BeerSnake(QWidget *parent) : QWidget(parent) {
    setStyleSheet("background-color:white;");
    resize(BOARD_WIDTH, BOARD_HIGHT);
+   setFixedSize(size());
    loadImages();
    startGame();
 }
@@ -16,6 +18,7 @@ void BeerSnake::loadImages() {
 }
 
 void BeerSnake::startGame() {
+   gameOver = false;
    length = 2;
    direction = BeerSnake::Up;
    newDirection = BeerSnake::Up;
@@ -24,7 +27,7 @@ void BeerSnake::startGame() {
    snakeXs.at(1) = snakeXs.at(0);
    snakeYs.at(1) = snakeYs.at(0) + ITEM_SIDE;
    placeBeer();
-   startTimer(STEP_TIME);
+   timerID = startTimer(STEP_TIME);
 }
 
 void BeerSnake::paintEvent(QPaintEvent *e) {
@@ -32,17 +35,35 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
 
    QPainter painter(this);
 
-   painter.drawImage(snakeXs.at(0), snakeYs.at(0), head);
+   if (!gameOver) {
+      painter.drawImage(snakeXs.at(0), snakeYs.at(0), head);
 
-   for (int piece = 1; piece < length; piece++) {
-      painter.drawImage(snakeXs.at(piece), snakeYs.at(piece), body);
+      for (int piece = 1; piece < length; piece++) {
+         painter.drawImage(snakeXs.at(piece), snakeYs.at(piece), body);
+      }
+
+      painter.drawImage(beerX, beerY, beer);
+   }
+   else {
+      killTimer(timerID);
+      QString message;
+      message.setNum(length - 2);
+      message.append(" beers was 1 too many...");
+      QFont font("Courier", 15, QFont::DemiBold);
+      QFontMetrics fm(font);
+      int textWidth = fm.width(message);
+      painter.setFont(font);
+      int h = height();
+      int w = width();
+      painter.translate(QPoint(w/ 2, h/2));
+      painter.drawText(-textWidth/2, 0, message);
    }
 
-   painter.drawImage(beerX, beerY, beer);
 }
 
 void BeerSnake::timerEvent(QTimerEvent *e) {
    Q_UNUSED(e);
+   checkCollision();
    changeDirection();
    drinkBeer();
    move();
@@ -166,9 +187,19 @@ void BeerSnake::placeBeer() {
       placeBeer();
    }
 }
+
 void BeerSnake::drinkBeer() {
    if (beerX == snakeXs.at(0) && beerY == snakeYs.at(0)) {
       ++length;
       placeBeer();
+   }
+}
+
+void BeerSnake::checkCollision() {
+   for (int piece = 1; piece < length; piece++) {
+      if (snakeXs.at(0) == snakeXs.at(piece) &&
+         snakeYs.at(0) == snakeYs.at(piece)) {
+         gameOver = true;
+      }
    }
 }

@@ -31,6 +31,8 @@ private:
    int newDirection;
    int beerX;
    int beerY;
+   bool gameOver;
+   int timerID;
 
    QImage head;
    QImage body;
@@ -42,5 +44,6 @@ private:
    void move();
    void placeBeer();
    void drinkBeer();
+   void checkCollision();
 
 };
