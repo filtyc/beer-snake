@@ -16,15 +16,18 @@ protected:
    void keyPressEvent(QKeyEvent *);
 private:
    static const int ITEM_SIDE = 30;
-   static const int ITEMS_HORIZONTALLY = 20;
+   static const int ITEMS_HORIZONTALLY = 15;
    static const int ITEMS_VERTICALLY = 20;
    static const int BOARD_WIDTH = ITEM_SIDE * ITEMS_HORIZONTALLY;
    static const int BOARD_HIGHT = ITEM_SIDE * ITEMS_VERTICALLY;
    static const int MAX_LENGTH = ITEMS_HORIZONTALLY * ITEMS_VERTICALLY;
+   static const int INITIAL_STEP_TIME = 200;
+   static const int FINAL_STEP_TIME = 160;
+   static const int STEP_TIME_INCREMENT = 2;
    enum Direction {Up, Right, Down, Left};
-   static const int STEP_TIME = 200;
 
    int length;
+   int stepTime;
    std::array<int, MAX_LENGTH> snakeXs;
    std::array<int, MAX_LENGTH> snakeYs;
    int direction;

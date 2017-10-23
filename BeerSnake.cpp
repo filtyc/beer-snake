@@ -20,6 +20,7 @@ void BeerSnake::loadImages() {
 void BeerSnake::startGame() {
    gameOver = false;
    length = 2;
+   stepTime = INITIAL_STEP_TIME;
    direction = BeerSnake::Up;
    newDirection = BeerSnake::Up;
    snakeXs.at(0) = (ITEMS_HORIZONTALLY/2-1)*ITEM_SIDE;
@@ -27,7 +28,7 @@ void BeerSnake::startGame() {
    snakeXs.at(1) = snakeXs.at(0);
    snakeYs.at(1) = snakeYs.at(0) + ITEM_SIDE;
    placeBeer();
-   timerID = startTimer(STEP_TIME);
+   timerID = startTimer(stepTime);
 }
 
 void BeerSnake::paintEvent(QPaintEvent *e) {
@@ -49,7 +50,7 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
       QString message;
       message.setNum(length - 2);
       message.append(" beers was 1 too many...");
-      QFont font("Courier", 15, QFont::DemiBold);
+      QFont font("Courier", 17, QFont::DemiBold);
       QFontMetrics fm(font);
       int textWidth = fm.width(message);
       painter.setFont(font);
@@ -192,6 +193,11 @@ void BeerSnake::drinkBeer() {
    if (beerX == snakeXs.at(0) && beerY == snakeYs.at(0)) {
       ++length;
       placeBeer();
+      if (stepTime > FINAL_STEP_TIME) {
+         stepTime -= STEP_TIME_INCREMENT;
+         killTimer(timerID);
+         timerID = startTimer(stepTime);
+      }
    }
 }
 
