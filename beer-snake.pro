@@ -21,3 +21,4 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Input
 HEADERS += BeerSnake.h
 SOURCES += BeerSnake.cpp Main.cpp
+ICON = images/logo.icns
