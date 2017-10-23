@@ -4,7 +4,7 @@
 
 QT += widgets
 TEMPLATE = app
-TARGET = beer-snake
+TARGET = "Beer Snake"
 INCLUDEPATH += .
 
 # The following define makes your compiler warn you if you use any
@@ -21,4 +21,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Input
 HEADERS += BeerSnake.h
 SOURCES += BeerSnake.cpp Main.cpp
+RESOURCES += images.qrc
 ICON = images/logo.icns

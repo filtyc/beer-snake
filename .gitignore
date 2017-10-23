@@ -46,4 +46,4 @@ target_wrapper.*
 CMakeLists.txt.user*
 
 # project's build
-beer-snake.app/
+Beer Snake.app/

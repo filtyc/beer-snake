@@ -12,9 +12,9 @@ BeerSnake::BeerSnake(QWidget *parent) : QWidget(parent) {
 }
 
 void BeerSnake::loadImages() {
-   head.load("images/head.png");
-   body.load("images/body.png");
-   beer.load("images/beer.png");
+   head.load(":/images/head.png");
+   body.load(":/images/body.png");
+   beer.load(":/images/beer.png");
 }
 
 void BeerSnake::startGame() {
