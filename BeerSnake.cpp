@@ -44,6 +44,7 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
 void BeerSnake::timerEvent(QTimerEvent *e) {
    Q_UNUSED(e);
    changeDirection();
+   drinkBeer();
    move();
    repaint();
 }
@@ -162,6 +163,12 @@ void BeerSnake::placeBeer() {
       }
    }
    if (onSnake) {
+      placeBeer();
+   }
+}
+void BeerSnake::drinkBeer() {
+   if (beerX == snakeXs.at(0) && beerY == snakeYs.at(0)) {
+      ++length;
       placeBeer();
    }
 }

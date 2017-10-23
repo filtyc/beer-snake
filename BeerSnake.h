@@ -41,5 +41,6 @@ private:
    void changeDirection();
    void move();
    void placeBeer();
+   void drinkBeer();
 
 };
