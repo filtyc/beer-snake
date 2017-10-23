@@ -24,6 +24,9 @@ private:
    static const int INITIAL_STEP_TIME = 200;
    static const int FINAL_STEP_TIME = 100;
    static const int STEP_TIME_INCREMENT = 2;
+   static const int LAST_X = (ITEMS_HORIZONTALLY - 1) * ITEM_SIDE;
+   static const int LAST_Y = (ITEMS_VERTICALLY - 1) * ITEM_SIDE;
+
    enum Direction {Up, Right, Down, Left};
 
    int length;
@@ -36,6 +39,9 @@ private:
    int beerY;
    bool gameOver;
    int timerID;
+
+   int &headX = snakeXs.at(0);
+   int &headY = snakeYs.at(0);
 
    QImage head;
    QImage body;

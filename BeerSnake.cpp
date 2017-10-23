@@ -19,14 +19,12 @@ void BeerSnake::loadImages() {
 
 void BeerSnake::startGame() {
    gameOver = false;
-   length = 2;
+   length = 1;
    stepTime = INITIAL_STEP_TIME;
    direction = BeerSnake::Up;
    newDirection = BeerSnake::Up;
-   snakeXs.at(0) = (ITEMS_HORIZONTALLY/2-1)*ITEM_SIDE;
-   snakeYs.at(0) = (ITEMS_VERTICALLY/2-1)*ITEM_SIDE;
-   snakeXs.at(1) = snakeXs.at(0);
-   snakeYs.at(1) = snakeYs.at(0) + ITEM_SIDE;
+   headX = (ITEMS_HORIZONTALLY/2-1)*ITEM_SIDE;
+   headY = (ITEMS_VERTICALLY/2-1)*ITEM_SIDE;
    placeBeer();
    timerID = startTimer(stepTime);
 }
@@ -37,7 +35,7 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
    QPainter painter(this);
 
    if (!gameOver) {
-      painter.drawImage(snakeXs.at(0), snakeYs.at(0), head);
+      painter.drawImage(headX, headY, head);
 
       for (int piece = 1; piece < length; piece++) {
          painter.drawImage(snakeXs.at(piece), snakeYs.at(piece), body);
@@ -54,9 +52,7 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
       QFontMetrics fm(font);
       int textWidth = fm.width(message);
       painter.setFont(font);
-      int h = height();
-      int w = width();
-      painter.translate(QPoint(w/ 2, h/2));
+      painter.translate(QPoint(BOARD_WIDTH/ 2, BOARD_HIGHT/2));
       painter.drawText(-textWidth/2, 0, message);
    }
 
@@ -88,6 +84,7 @@ void BeerSnake::keyPressEvent(QKeyEvent *e) {
       }
       case Qt::Key_Left: {
          newDirection = BeerSnake::Left;
+         break;
       }
       default: {
          break;
@@ -103,39 +100,40 @@ void BeerSnake::move() {
 
    switch(direction) {
       case BeerSnake::Up: {
-         if (snakeYs.at(0) == 0){
-            snakeYs.at(0) = (ITEMS_VERTICALLY - 1) * ITEM_SIDE;
+         if (headY == 0){
+            headY = LAST_Y;
          }
          else {
-            snakeYs.at(0) -= ITEM_SIDE;
+            headY -= ITEM_SIDE;
          }
          break;
       }
       case BeerSnake::Right: {
-         if (snakeXs.at(0) == (ITEMS_HORIZONTALLY - 1) * ITEM_SIDE) {
-            snakeXs.at(0) = 0;
+         if (headX == LAST_X) {
+            headX = 0;
          }
          else {
-            snakeXs.at(0) += ITEM_SIDE;
+            headX += ITEM_SIDE;
          }
          break;
       }
       case BeerSnake::Down: {
-         if (snakeYs.at(0) == (ITEMS_VERTICALLY - 1) * ITEM_SIDE) {
-            snakeYs.at(0) = 0;
+         if (headY == LAST_Y) {
+            headY = 0;
          }
          else {
-            snakeYs.at(0) += ITEM_SIDE;
+            headY += ITEM_SIDE;
          }
          break;
       }
       case BeerSnake::Left: {
-         if (snakeXs.at(0) == 0) {
-            snakeXs.at(0) = (ITEMS_HORIZONTALLY - 1) * ITEM_SIDE;
+         if (headX == 0) {
+            headX = LAST_X;
          }
          else {
-            snakeXs.at(0) -= ITEM_SIDE;
+            headX -= ITEM_SIDE;
          }
+         break;
       }
    }
 }
@@ -190,7 +188,7 @@ void BeerSnake::placeBeer() {
 }
 
 void BeerSnake::drinkBeer() {
-   if (beerX == snakeXs.at(0) && beerY == snakeYs.at(0)) {
+   if (beerX == headX && beerY == headY) {
       ++length;
       placeBeer();
       if (stepTime > FINAL_STEP_TIME) {
@@ -203,8 +201,8 @@ void BeerSnake::drinkBeer() {
 
 void BeerSnake::checkCollision() {
    for (int piece = 1; piece < length; piece++) {
-      if (snakeXs.at(0) == snakeXs.at(piece) &&
-         snakeYs.at(0) == snakeYs.at(piece)) {
+      if (headX == snakeXs.at(piece) &&
+         headY == snakeYs.at(piece)) {
          gameOver = true;
       }
    }
