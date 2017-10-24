@@ -1,7 +1,8 @@
 #include <BeerSnake.h>
 #include <QPainter>
-#include <QTime>
 #include <QApplication>
+#include <QDateTime>
+#include <iostream>
 
 BeerSnake::BeerSnake(QWidget *parent) : QWidget(parent) {
    setStyleSheet("background-color:white;");
@@ -20,13 +21,15 @@ void BeerSnake::loadImages() {
 void BeerSnake::startGame() {
    gameOver = false;
    length = 1;
-   stepTime = INITIAL_STEP_TIME;
    direction = BeerSnake::Up;
    newDirection = BeerSnake::Up;
    headX = (ITEMS_HORIZONTALLY/2-1)*ITEM_SIDE;
    headY = (ITEMS_VERTICALLY/2-1)*ITEM_SIDE;
    placeBeer();
-   timerID = startTimer(stepTime);
+   timer = new QTimer(this);
+   timer->setInterval(INITIAL_INTERVAL);
+   connect(timer, &QTimer::timeout, this, &BeerSnake::onTimeOut);
+   timer->start();
 }
 
 void BeerSnake::paintEvent(QPaintEvent *e) {
@@ -44,7 +47,7 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
       painter.drawImage(beerX, beerY, beer);
    }
    else {
-      killTimer(timerID);
+      timer->stop();
       QString message;
       message.setNum(length - 2);
       message.append(" beers was 1 too many...");
@@ -58,8 +61,7 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
 
 }
 
-void BeerSnake::timerEvent(QTimerEvent *e) {
-   Q_UNUSED(e);
+void BeerSnake::onTimeOut() {
    checkCollision();
    changeDirection();
    drinkBeer();
@@ -170,8 +172,7 @@ void BeerSnake::changeDirection() {
 }
 
 void BeerSnake::placeBeer() {
-   QTime time = QTime::currentTime();
-   qsrand((uint)time.msec());
+   qsrand(QDateTime::currentMSecsSinceEpoch());
    int r = qrand() % (ITEMS_HORIZONTALLY - 1);
    beerX = r * ITEM_SIDE;
    r = qrand() % (ITEMS_VERTICALLY - 1);
@@ -191,11 +192,10 @@ void BeerSnake::drinkBeer() {
    if (beerX == headX && beerY == headY) {
       ++length;
       placeBeer();
-      if (stepTime > FINAL_STEP_TIME) {
-         stepTime -= STEP_TIME_INCREMENT;
-         killTimer(timerID);
-         timerID = startTimer(stepTime);
+      if (timer->interval() > FINAL_INTERVAL) {
+         timer->setInterval(timer->interval() - INTERVAL_DELTA);
       }
+      std::cout << timer->interval() << std::endl;
    }
 }
 

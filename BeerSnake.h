@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QImage>
+#include <QTimer>
 #include <array>
 
 
@@ -12,7 +13,6 @@ public:
    BeerSnake(QWidget *parent = 0);
 protected:
    void paintEvent(QPaintEvent *);
-   void timerEvent(QTimerEvent *);
    void keyPressEvent(QKeyEvent *);
 private:
    static const int ITEM_SIDE = 30;
@@ -21,16 +21,15 @@ private:
    static const int BOARD_WIDTH = ITEM_SIDE * ITEMS_HORIZONTALLY;
    static const int BOARD_HIGHT = ITEM_SIDE * ITEMS_VERTICALLY;
    static const int MAX_LENGTH = ITEMS_HORIZONTALLY * ITEMS_VERTICALLY;
-   static const int INITIAL_STEP_TIME = 200;
-   static const int FINAL_STEP_TIME = 100;
-   static const int STEP_TIME_INCREMENT = 2;
+   static const int INITIAL_INTERVAL = 200;
+   static const int FINAL_INTERVAL = 100;
+   static const int INTERVAL_DELTA = 2;
    static const int LAST_X = (ITEMS_HORIZONTALLY - 1) * ITEM_SIDE;
    static const int LAST_Y = (ITEMS_VERTICALLY - 1) * ITEM_SIDE;
 
    enum Direction {Up, Right, Down, Left};
 
    int length;
-   int stepTime;
    std::array<int, MAX_LENGTH> snakeXs;
    std::array<int, MAX_LENGTH> snakeYs;
    int direction;
@@ -38,7 +37,6 @@ private:
    int beerX;
    int beerY;
    bool gameOver;
-   int timerID;
 
    int &headX = snakeXs.at(0);
    int &headY = snakeYs.at(0);
@@ -47,6 +45,9 @@ private:
    QImage body;
    QImage beer;
 
+   QTimer *timer;
+
+   void onTimeOut();
    void loadImages();
    void startGame();
    void changeDirection();
