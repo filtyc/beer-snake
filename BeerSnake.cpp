@@ -2,7 +2,6 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDateTime>
-#include <iostream>
 
 BeerSnake::BeerSnake(QWidget *parent) : QWidget(parent) {
    setStyleSheet("background-color:white;");
@@ -20,7 +19,7 @@ void BeerSnake::loadImages() {
 
 void BeerSnake::startGame() {
    gameOver = false;
-   length = 1;
+   length = INITIAL_LENGHT;
    direction = BeerSnake::Up;
    newDirection = BeerSnake::Up;
    headX = (ITEMS_HORIZONTALLY/2-1)*ITEM_SIDE;
@@ -49,7 +48,7 @@ void BeerSnake::paintEvent(QPaintEvent *e) {
    else {
       timer->stop();
       QString message;
-      message.setNum(length - 2);
+      message.setNum(length - INITIAL_LENGHT);
       message.append(" beers was 1 too many...");
       QFont font("Courier", 17, QFont::DemiBold);
       QFontMetrics fm(font);
@@ -195,7 +194,6 @@ void BeerSnake::drinkBeer() {
       if (timer->interval() > FINAL_INTERVAL) {
          timer->setInterval(timer->interval() - INTERVAL_DELTA);
       }
-      std::cout << timer->interval() << std::endl;
    }
 }
 

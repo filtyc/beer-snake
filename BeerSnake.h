@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <array>
 
-
 class BeerSnake : public QWidget {
 
 public:
@@ -21,6 +20,7 @@ private:
    static const int BOARD_WIDTH = ITEM_SIDE * ITEMS_HORIZONTALLY;
    static const int BOARD_HIGHT = ITEM_SIDE * ITEMS_VERTICALLY;
    static const int MAX_LENGTH = ITEMS_HORIZONTALLY * ITEMS_VERTICALLY;
+   static const int INITIAL_LENGHT = 1;
    static const int INITIAL_INTERVAL = 200;
    static const int FINAL_INTERVAL = 100;
    static const int INTERVAL_DELTA = 2;
@@ -55,5 +55,4 @@ private:
    void placeBeer();
    void drinkBeer();
    void checkCollision();
-
 };
